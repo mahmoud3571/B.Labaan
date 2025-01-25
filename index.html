@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لبن ميت غمر</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f8ff;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #1e90ff;
+      color: black;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #1e90ff;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .branch {
+      background-color: #e6f7ff;
+      border: 2px solid #1e90ff;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgb(0, 0, 0);
+      text-align: center;
+    }
+
+    .branch h4 {
+      color: rgb(0, 0, 0);
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      padding: 10px;
+      margin-bottom: 5px;
+      background-color: #f0faff;
+      border: 1px solid #1e90ff;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+    }
+
+    .item-name {
+      flex: 1;
+      text-align: left;
+    }
+
+    .price {
+      font-size: 18px;
+      color: #000000;
+    }
+
+    .item-image {
+      max-width: 100px;
+      max-height: 100px;
+      object-fit: cover;
+      margin-left: 15px;
+      border-radius: 5px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #1e90ff;
+      color: black;
+      margin-top: 20px;
+    }
+
+    footer a {
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: #ffa500;
+    }
+
+    #cartButton {
+      background-color: #1e90ff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      margin-top: 20px;
+      display: block;
+      width: 100%;
+      max-width: 200px;
+      margin: 20px auto;
+    }
+
+    #cartButton:hover {
+      background-color: #ffa500;
+    }
+
+    /* زر عائم */
+    #scrollDownButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #1e90ff;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    #scrollDownButton:hover {
+      background-color: #ffa500;
+    }
+
+    /* Media Queries لتعديل التصميم في الشاشات الصغيرة */
+    @media (max-width: 768px) {
+      header {
+        font-size: 20px;
+        padding: 15px 0;
+      }
+
+      main {
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      .branch {
+        padding: 10px;
+      }
+
+      .item-name,
+      .price {
+        font-size: 16px;
+      }
+
+      .item-image {
+        max-width: 80px;
+        max-height: 80px;
+      }
+
+      ul li {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .quantity {
+        width: 60px;
+      }
+
+      #scrollDownButton {
+        font-size: 18px;
+        padding: 8px 12px;
+      }
+    }
+
+    /* الشاشات الصغيرة جدًا (هواتف صغيرة جدًا) */
+    @media (max-width: 480px) {
+      header {
+        font-size: 18px;
+        padding: 10px 0;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .branch {
+        padding: 8px;
+      }
+
+      .item-name,
+      .price {
+        font-size: 14px;
+      }
+
+      .item-image {
+        max-width: 60px;
+        max-height: 60px;
+      }
+
+      ul li {
+        font-size: 14px;
+      }
+
+      #cartButton {
+        font-size: 16px;
+        padding: 8px;
+      }
+
+      #scrollDownButton {
+        font-size: 16px;
+        padding: 6px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>لبن ميت غمر</header>
+  <main>
+    <h1>الاصناف</h1>
+
+    <div id="menuContainer"></div>
+
+    <button id="cartButton" onclick="window.location.href = 'cart.html';">إذهب إلى السلة</button>
+  </main>
+  <footer>
+    Powered by <a href="admin.html" target="_blank">Mahmoud Khaled</a>. © 2025
+  </footer>
+
+  <!-- زر عائم للتنقل لأسفل الصفحة -->
+  <button id="scrollDownButton" onclick="scrollToBottom()">⬇️</button>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || []; // استخدام localStorage للسلة
+
+    // استرجاع بيانات المنيو
+    function getData() {
+      return JSON.parse(localStorage.getItem('menuData')) || {};
+    }
+
+    // عرض المنتجات في الصفحة الرئيسية
+    function renderMenu() {
+      const menuData = getData();
+      const container = document.getElementById('menuContainer');
+      container.innerHTML = '';
+
+      Object.keys(menuData).forEach(branchName => {
+        const branchDiv = document.createElement('div');
+        branchDiv.className = 'branch';
+
+        const branchTitle = document.createElement('h4');
+        branchTitle.textContent = branchName;
+
+        const itemList = document.createElement('ul');
+        menuData[branchName].forEach(item => {
+          const listItem = document.createElement('li');
+
+          listItem.innerHTML = `
+            <span class="item-name">${item.name}</span>
+            <span class="price">${item.price} جنيه</span>
+            <img src="${item.image}" alt="${item.name}" class="item-image" />
+            <input type="number" class="quantity" id="quantity-${item.name}" value="1" min="1" />
+            <button onclick="addToCart('${item.name}', ${item.price})">أضف للسلة</button>
+          `;
+          itemList.appendChild(listItem);
+        });
+
+        branchDiv.appendChild(branchTitle);
+        branchDiv.appendChild(itemList);
+        container.appendChild(branchDiv);
+      });
+    }
+
+    // إضافة منتج إلى السلة
+    function addToCart(itemName, itemPrice) {
+      const quantity = document.getElementById(`quantity-${itemName}`).value;
+      const totalPrice = itemPrice * quantity;
+
+      cart.push({ name: itemName, price: itemPrice, quantity: quantity, totalPrice: totalPrice });
+
+      // حفظ السلة في localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      alert(`${itemName} تم إضافته إلى السلة (الكمية: ${quantity})`);
+    }
+
+    // الانتقال إلى أسفل الصفحة عند الضغط على زر التنقل لأسفل
+    function scrollToBottom() {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+
+    // تشغيل عند تحميل الصفحة
+    window.onload = renderMenu;
+  </script>
+</body>
+</html>
